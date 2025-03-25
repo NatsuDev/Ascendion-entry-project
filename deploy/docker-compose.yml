@@ -1,0 +1,45 @@
+name: ascendion_entry_project
+services:
+
+  mariadb:
+    image: yobasystems/alpine-mariadb:10.11.8-amd64
+    restart: always
+    platform: linux/amd64
+    volumes:
+      - ../local-components/mysql:/var/lib/mysql:z
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    expose:
+      - '3306'
+    ports:
+      - '3306:3306'
+
+  app:
+    build:
+      context: ../
+      dockerfile: ./deploy/Dockerfile
+    platform: linux/amd64
+    environment:
+      APP_ENV: dev
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mariadb
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    platform: linux/amd64
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: password
+      PMA_CONTROLUSER: root
+      PMA_CONTROLPASS: password
+      HIDE_PHP_VERSION: true
+    ports:
+      - '8090:80'
+    depends_on:
+      - mariadb

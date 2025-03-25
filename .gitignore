@@ -1,0 +1,7 @@
+.idea/*
+.env.*
+!.env.*.enc
+!.env.example
+test.py
+__pycache__
+local-components
