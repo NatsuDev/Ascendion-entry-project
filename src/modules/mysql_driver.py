@@ -7,7 +7,7 @@ from aiomysql.cursors import DictCursor
 from pymysql import err as mysql_errors
 from pymysql.cursors import DictCursor as SyncDictCursor
 
-from . import AttrDict
+from .attr_dict import AttrDict
 
 
 class _PoolContextManager:

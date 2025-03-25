@@ -41,24 +41,20 @@ def migrate_db():
 
 
 @asynccontextmanager  # pragma: no cover
-async def lifespan(app: FastAPI):
+async def lifespan(_: FastAPI):
     """
     App lifespan context manager
-    :param app: Fastapi APP
+    :param _: Fastapi APP
     """
     # Startup
     await STORAGE.acquire_pool()
-    app_.add_exception_handler(500, error_500_handler)
-    app_.add_exception_handler(HTTPException, generic_error_handler)  # noqa
-    app_.add_exception_handler(ValidationError, validation_error_handler)  # noqa
-    app.mount("/v1", routes.v1.app_, "V1")
     yield  # pragma: no cover
     # Shutdown
     await STORAGE.close_pool()
 
 
 app_: FastAPI = FastAPI(
-    root_path=None if ENVIRONMENT in ("dev", "docker") else "/api",
+    root_path=None if ENVIRONMENT in ("dev", "local") else "/api",
     lifespan=lifespan,
     docs_url=None if SETTINGS.disable_swagger_docs else "/docs",
     redoc_url=None if SETTINGS.disable_redoc_docs else "/redoc",
@@ -67,6 +63,11 @@ app_: FastAPI = FastAPI(
     default_response_class=JSONResponse,
     storage=STORAGE,
 )
+
+app_.add_exception_handler(500, error_500_handler)
+app_.add_exception_handler(HTTPException, generic_error_handler)  # noqa
+app_.add_exception_handler(ValidationError, validation_error_handler)  # noqa
+app_.mount("/v1", routes.v1.app_, "V1")
 
 app_.add_middleware(
     CORSMiddleware,  # noqa

@@ -10,9 +10,6 @@ SRC_DIR: str = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR: str = os.path.dirname(SRC_DIR)
 ENVIRONMENT = os.getenv("APP_ENV", "local")
 load_dotenv(os.path.join(ROOT_DIR, "env", f".env.{ENVIRONMENT}"))
-print(os.path.abspath(os.path.join(ROOT_DIR, "env", f".env.{ENVIRONMENT}")))
-print(ENVIRONMENT)
-print(os.environ)
 
 
 class MariaDBSettings(BaseModel):

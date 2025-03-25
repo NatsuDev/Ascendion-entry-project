@@ -40,6 +40,11 @@ Kill the created app container and run `pipenv run python3 src/main.py`
 to enable file change watchdog and hot-reload. \
 See [Installation & running (non-dev)](#installation--running-non-dev) for docs access.
 
+## Testing
+
+- Spin up database docker container.
+- Run `pytest` in root directory.
+
 ## Creating migrations
 [yoyo docs](https://ollycope.com/software/yoyo/latest/)
 
